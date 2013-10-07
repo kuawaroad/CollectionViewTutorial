@@ -58,6 +58,31 @@
 }
  */
 
+#pragma mark - UICollectionViewDelegate
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *searchTerm = self.searches[indexPath.section];
+    FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
+    
+    CGSize retVal = photo.thumbnail.size.width > 0 ? photo.thumbnail.size : CGSizeMake(100, 100);
+    retVal.height += 35;
+    retVal.width += 35;
+    return retVal;
+}
+
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+                                // TOP, LEFT, BOTTOM, RIGHT
+    return UIEdgeInsetsMake(50, 20, 50, 20);
+}
+
 -(IBAction)shareButtonTapped:(id)sender {
     
 }
