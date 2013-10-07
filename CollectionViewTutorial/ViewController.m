@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "Flickr.h"
 #import "FlickrPhoto.h"
-
+#import "FlickrPhotoCell.h"
 
 @interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -22,6 +22,7 @@
 @property (nonatomic,strong) NSMutableDictionary *searchResults;
 @property (nonatomic,strong) NSMutableArray *searches;
 @property (nonatomic,strong) Flickr *flickr;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @end
 
 @implementation ViewController
@@ -33,6 +34,8 @@
     self.searches = [@[] mutableCopy];
     self.searchResults = [@{} mutableCopy];
     self.flickr = [[Flickr alloc] init];
+    
+    //[self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"FlickrCell"];
 }
 
 #pragma mark - UICollectionView Data Source
@@ -47,8 +50,10 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FlickrCell" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor orangeColor];
+    FlickrPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FlickrCell" forIndexPath:indexPath];
+    NSString *searchTerm = self.searches[indexPath.section];
+    cell.photo = self.searchResults[searchTerm][indexPath.row];
+    
     return cell;
 }
 
@@ -96,17 +101,18 @@
         if (results && results.count > 0) {
             // checks if duplicate, adds to front of array if not
             if (![self.searches containsObject:searchTerm]) {
-                NSLog(@"Found %lu photos for %@",results.count, searchTerm);
+                NSLog(@"Found %lu photos for '%@'",results.count, searchTerm);
                 [self.searches insertObject:searchTerm atIndex:0];
                 self.searchResults[searchTerm] = results;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // new data has been downloaded, reload collection view on main thread
+                [self.collectionView reloadData];
                 [self.spinner stopAnimating];
             });
         } else {
             // error occurred
-            NSLog(@"Flickr Search Error: %@\n%@", error.localizedDescription, error.localizedFailureReason);
+            NSLog(@"Flickr Search Error: %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 // request has failed, update UI on main thread
                 [self.spinner stopAnimating];
