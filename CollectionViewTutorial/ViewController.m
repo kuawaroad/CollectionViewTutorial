@@ -11,6 +11,7 @@
 #import "FlickrPhoto.h"
 #import "FlickrPhotoCell.h"
 #import "FlickrPhotoHeaderView.h"
+#import "FlickrPhotoViewController.h"
 
 @interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -24,6 +25,8 @@
 @property (nonatomic,strong) NSMutableArray *searches;
 @property (nonatomic,strong) Flickr *flickr;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (nonatomic) BOOL sharing;
 @end
 
 @implementation ViewController
@@ -69,7 +72,14 @@
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (!self.sharing) {
+        NSString *searchTerm = self.searches[indexPath.section];
+        FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
+        [self performSegueWithIdentifier:@"ShowFlickrPhoto" sender:photo];
+        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    } else {
+        // multiple selection
+    }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -92,6 +102,15 @@
     return UIEdgeInsetsMake(50, 20, 50, 20);
 }
 
+#pragma mark - Storyboard Segue Prep
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowFlickrPhoto"]) {
+        FlickrPhotoViewController *photoVC = segue.destinationViewController;
+        photoVC.flickrPhoto = sender;
+    }
+}
+
+#pragma mark - Button Click
 -(IBAction)shareButtonTapped:(id)sender {
     
 }
