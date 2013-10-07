@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#define FLICKR_API_KEY @"401cc508df900471ffd0d08438f2890c"
+
 @interface ViewController () <UITextFieldDelegate>
 @property (nonatomic,weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIBarButtonItem *shareButton;
