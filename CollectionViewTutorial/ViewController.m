@@ -7,14 +7,20 @@
 //
 
 #import "ViewController.h"
+#import "Flickr.h"
+#import "FlickrPhoto.h"
 
-#define FLICKR_API_KEY @"401cc508df900471ffd0d08438f2890c"
 
 @interface ViewController () <UITextFieldDelegate>
 @property (nonatomic,weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIBarButtonItem *shareButton;
 @property (nonatomic,weak) IBOutlet UITextField *textField;
 -(IBAction)shareButtonTapped:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (nonatomic,strong) NSMutableDictionary *searchResults;
+@property (nonatomic,strong) NSMutableArray *searches;
+@property (nonatomic,strong) Flickr *flickr;
 @end
 
 @implementation ViewController
@@ -23,14 +29,44 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
-    
+    self.searches = [@[] mutableCopy];
+    self.searchResults = [@{} mutableCopy];
+    self.flickr = [[Flickr alloc] init];
 }
 
 -(IBAction)shareButtonTapped:(id)sender {
     
 }
 
+#pragma mark - UITextFieldDelegate methods
+// called when Return button hit
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.spinner startAnimating];
+    // Use Flickr class to search for a term asynchronously.
+    [self.flickr searchFlickrForTerm:textField.text completionBlock:^(NSString *searchTerm, NSArray *results, NSError *error) {
+        if (results && results.count > 0) {
+            // checks if duplicate, adds to front of array if not
+            if (![self.searches containsObject:searchTerm]) {
+                NSLog(@"Found %lu photos for %@",results.count, searchTerm);
+                [self.searches insertObject:searchTerm atIndex:0];
+                self.searchResults[searchTerm] = results;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // new data has been downloaded, reload collection view on main thread
+                [self.spinner stopAnimating];
+            });
+        } else {
+            // error occurred
+            NSLog(@"Flickr Search Error: %@\n%@", error.localizedDescription, error.localizedFailureReason);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // request has failed, update UI on main thread
+                [self.spinner stopAnimating];
+            });
+        }
+    }];
+    [textField resignFirstResponder];
+    return YES;
+}
 
 - (void)didReceiveMemoryWarning
 {
