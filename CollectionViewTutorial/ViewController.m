@@ -11,7 +11,8 @@
 #import "FlickrPhoto.h"
 
 
-@interface ViewController () <UITextFieldDelegate>
+@interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
 @property (nonatomic,weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIBarButtonItem *shareButton;
 @property (nonatomic,weak) IBOutlet UITextField *textField;
@@ -33,6 +34,29 @@
     self.searchResults = [@{} mutableCopy];
     self.flickr = [[Flickr alloc] init];
 }
+
+#pragma mark - UICollectionView Data Source
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSString *searchTerm = self.searches[section];
+    return [self.searchResults[searchTerm] count];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return self.searches.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FlickrCell" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor orangeColor];
+    return cell;
+}
+
+/*
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+}
+ */
 
 -(IBAction)shareButtonTapped:(id)sender {
     
