@@ -12,8 +12,9 @@
 #import "FlickrPhotoCell.h"
 #import "FlickrPhotoHeaderView.h"
 #import "FlickrPhotoViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic,weak) IBOutlet UIToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIBarButtonItem *shareButton;
@@ -27,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (nonatomic) BOOL sharing;
+@property (nonatomic,strong) NSMutableArray *selectedPhotos;
 @end
 
 @implementation ViewController
@@ -38,7 +40,7 @@
     self.searches = [@[] mutableCopy];
     self.searchResults = [@{} mutableCopy];
     self.flickr = [[Flickr alloc] init];
-    
+    self.selectedPhotos = [@[] mutableCopy];
     //[self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"FlickrCell"];
 }
 
@@ -79,11 +81,18 @@
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     } else {
         // multiple selection
+        NSString *searchTerm = self.searches[indexPath.section];
+        FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
+        [self.selectedPhotos addObject:photo];
     }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (self.sharing) {
+        NSString *searchTerm = self.searches[indexPath.section];
+        FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
+        [self.selectedPhotos removeObject:photo];
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -112,7 +121,59 @@
 
 #pragma mark - Button Click
 -(IBAction)shareButtonTapped:(id)sender {
+    UIBarButtonItem *shareButton = (UIBarButtonItem *)sender;
     
+    
+    if (!self.sharing) {
+        // if entering Share mode, make DONE button & allow mutli-select
+        self.sharing = YES;
+        [shareButton setStyle:UIBarButtonItemStyleDone];
+        [shareButton setTitle:@"Done"];
+        [self.collectionView setAllowsMultipleSelection:YES];
+    } else {
+        // if exiting share mode, Share button & disallow multi-select
+        self.sharing = NO;
+        [shareButton setStyle:UIBarButtonItemStyleBordered];
+        [shareButton setTitle:@"Share"];
+        [self.collectionView setAllowsMultipleSelection:NO];
+        
+        // if the user has selected photos & hit DONE, bring up email composer
+        if ([self.selectedPhotos count] > 0) {
+            [self showMailComposerAndSend];
+        }
+        
+        // deselect all cells and clean up selectItems array
+        for (NSIndexPath* indexPath in self.collectionView.indexPathsForSelectedItems) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        [self.selectedPhotos removeAllObjects];
+    }
+}
+
+#pragma mark - EMAIL
+-(void)showMailComposerAndSend {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+        mailer.mailComposeDelegate = self;
+        [mailer setSubject:@"Check out these Flickr Photos"];
+        NSMutableString *emailBody = [NSMutableString string];
+        
+        for (FlickrPhoto *photo in self.selectedPhotos) {
+            NSString *url = [Flickr flickrPhotoURLForFlickrPhoto:photo size:@"m"];
+            [emailBody appendFormat:@"<div><img src='%@'></div><br>",url];
+        }
+        
+        [mailer setMessageBody:emailBody isHTML:YES];
+        [self presentViewController:mailer animated:YES completion:nil];
+    } else {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"MAIL FAIL" message:@"You can't send mail." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITextFieldDelegate methods
