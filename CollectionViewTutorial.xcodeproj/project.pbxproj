@@ -44,6 +44,7 @@
 		5E58566318031FDD00EB03E1 /* Flickr.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E58566018031FDD00EB03E1 /* Flickr.m */; };
 		5E58566418031FDD00EB03E1 /* FlickrPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E58566218031FDD00EB03E1 /* FlickrPhoto.m */; };
 		5E58566718032E0F00EB03E1 /* FlickrPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E58566618032E0F00EB03E1 /* FlickrPhotoCell.m */; };
+		5E58566A180338BE00EB03E1 /* FlickrPhotoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E585669180338BE00EB03E1 /* FlickrPhotoHeaderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,8 @@
 		5E58566218031FDD00EB03E1 /* FlickrPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrPhoto.m; sourceTree = "<group>"; };
 		5E58566518032E0F00EB03E1 /* FlickrPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrPhotoCell.h; sourceTree = "<group>"; };
 		5E58566618032E0F00EB03E1 /* FlickrPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrPhotoCell.m; sourceTree = "<group>"; };
+		5E585668180338BE00EB03E1 /* FlickrPhotoHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrPhotoHeaderView.h; sourceTree = "<group>"; };
+		5E585669180338BE00EB03E1 /* FlickrPhotoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrPhotoHeaderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +172,8 @@
 				5E58561618031B1B00EB03E1 /* ViewController.m */,
 				5E58566518032E0F00EB03E1 /* FlickrPhotoCell.h */,
 				5E58566618032E0F00EB03E1 /* FlickrPhotoCell.m */,
+				5E585668180338BE00EB03E1 /* FlickrPhotoHeaderView.h */,
+				5E585669180338BE00EB03E1 /* FlickrPhotoHeaderView.m */,
 				5E58565E18031FDD00EB03E1 /* Flickr Interface */,
 				5E58561818031B1B00EB03E1 /* Images.xcassets */,
 				5E58560718031B1B00EB03E1 /* Supporting Files */,
@@ -360,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E58566A180338BE00EB03E1 /* FlickrPhotoHeaderView.m in Sources */,
 				5E58561718031B1B00EB03E1 /* ViewController.m in Sources */,
 				5E58566718032E0F00EB03E1 /* FlickrPhotoCell.m in Sources */,
 				5E58561118031B1B00EB03E1 /* AppDelegate.m in Sources */,
