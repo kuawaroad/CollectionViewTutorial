@@ -1,18 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4451" systemVersion="13A461" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3676"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--class Prefix:identifier View Controller-->
+        <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AZH-3L-TR9"/>
+                        <viewControllerLayoutGuide type="bottom" id="NOf-3s-HNI"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bbX-XU-jhH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem title="Share" id="xPt-2b-ySm"/>
+                                </items>
+                            </toolbar>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gbd-QQ-x64">
+                                <rect key="frame" x="87" y="51" width="213" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="213" id="MKm-mP-sfd"/>
+                                    <constraint firstAttribute="height" constant="30" id="ouE-K9-aaF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hpd-6o-8aR">
+                                <rect key="frame" x="20" y="56" width="59" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bbX-XU-jhH" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="Ghx-he-ecu"/>
+                            <constraint firstItem="Hpd-6o-8aR" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="aiE-F4-rYU"/>
+                            <constraint firstAttribute="trailing" secondItem="bbX-XU-jhH" secondAttribute="trailing" id="cGU-41-YVC"/>
+                            <constraint firstItem="Hpd-6o-8aR" firstAttribute="centerY" secondItem="Gbd-QQ-x64" secondAttribute="centerY" id="dJB-6y-oY8"/>
+                            <constraint firstItem="Gbd-QQ-x64" firstAttribute="top" secondItem="bbX-XU-jhH" secondAttribute="bottom" constant="7" id="isH-pA-Kid"/>
+                            <constraint firstAttribute="trailing" secondItem="Gbd-QQ-x64" secondAttribute="trailing" constant="20" id="le6-jj-EfP"/>
+                            <constraint firstItem="bbX-XU-jhH" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="rSX-Sb-LfA"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="shareButton" destination="xPt-2b-ySm" id="gfB-Bp-exg"/>
+                        <outlet property="textField" destination="Gbd-QQ-x64" id="8ws-Is-HRM"/>
+                        <outlet property="toolbar" destination="bbX-XU-jhH" id="lLG-ww-eHY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
